@@ -1,9 +1,17 @@
 #include "main.h"
 
-int main()
+int main(int argc, char *argv[])
 {
+    if (argc != 2)
+    {
+        printf("You need to provide the number of bits\n");
+        return -1;
+    }
+
+    int n = atoi(argv[1]);
+
     mpz_t number;
-    generateLargeNumber(number, 1024);
+    generateLargePrimeNumber(number, n);
 
     gmp_printf("%Zd\n", number);
 
