@@ -1,5 +1,0 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory '/home/alexandre/Alexandre/Projets/encryption'
-echo ./obj/main.o ./obj/primes.o
-make: Leaving directory '/home/alexandre/Alexandre/Projets/encryption'
- 
