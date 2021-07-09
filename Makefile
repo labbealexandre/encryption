@@ -12,9 +12,6 @@ OBJS := $(SRCS:${SRC_DIRS}/%.c=$(OBJECT_DIRS)/%.o)
 
 CFLAGS := -lgmp -Wall
 
-test:
-	echo ${OBJS}
-
 all: ${OBJS}
 	mkdir -p $(dir ${TARGET})
 	gcc ${OBJS} -o ${TARGET} $(CFLAGS) -I ${INC_DIRS}
