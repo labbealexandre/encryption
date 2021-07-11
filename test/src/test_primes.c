@@ -32,3 +32,22 @@ void test_sieveOfEratosthenes()
         number++;
     }
 }
+
+void test_generateLargeNumber()
+{
+    mpz_t number;
+    generateLargeNumber(number, 8);
+    int integer = mpz_get_ui(number);
+
+    TEST_ASSERT_LESS_THAN_INT(256, integer);
+    TEST_ASSERT_GREATER_OR_EQUAL_INT(128, integer);
+}
+
+void test_generateLargeOddNumber()
+{
+    mpz_t number;
+    generateLargeOddNumber(number, 8);
+    int integer = mpz_get_ui(number);
+
+    TEST_ASSERT_EQUAL_INT(integer % 2, 1);
+}

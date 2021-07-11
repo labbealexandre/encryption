@@ -69,6 +69,11 @@ int is_divisible_by_first_prime(mpz_t number)
     return 0;
 }
 
+void millerRabin(mpz_t number, mpz_t witness)
+{
+    /* write number as d*2^r+1 */
+}
+
 void generateLargePrimeNumber(mpz_t number, int n)
 {
     while (1)
