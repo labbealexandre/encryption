@@ -17,5 +17,7 @@ int main()
     RUN_TEST(test_sieveOfEratosthenes);
     RUN_TEST(test_generateLargeNumber);
     RUN_TEST(test_generateLargeOddNumber);
+    RUN_TEST(test_factorOutPowersOf2);
+    RUN_TEST(test_millerRabin);
     return UNITY_END();
 }

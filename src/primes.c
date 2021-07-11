@@ -63,9 +63,71 @@ int is_divisible_by_first_prime(mpz_t number)
     return 0;
 }
 
-void millerRabin(mpz_t number, mpz_t witness)
+int factorOutPowersOf2(mpz_t number, mpz_t d)
 {
-    /* write number as d*2^r+1 */
+    int r = 0;
+    mpz_init(d);
+
+    mpz_t zero_mpz;
+    mpz_init(zero_mpz);
+
+    while (mpz_congruent_2exp_p(number, zero_mpz, r + 1))
+    {
+        r++;
+    }
+
+    mpz_tdiv_q_2exp(d, number, r);
+    return r;
+}
+
+int millerRabin(mpz_t number, mpz_t witness, mpz_t number_minus_1, mpz_t d, int r)
+{
+    mpz_t x;
+    mpz_init(x);
+    mpz_powm(x, witness, d, number); // x = a^d mod n
+
+    if (mpz_cmp_ui(x, 1) == 0 || mpz_cmp(x, number_minus_1) == 0) // if x = 1 or x = n − 1
+    {
+        return 0;
+    }
+
+    for (int j = 0; j < r - 1; j++)
+    {
+        mpz_powm_ui(x, x, 2, number);        // x = x^2 mod n
+        if (mpz_cmp(x, number_minus_1) == 0) // if x = n-1
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int multipleMillerRabin(mpz_t number, int k, gmp_randstate_t grt)
+{
+    mpz_t number_minus_1;
+    mpz_init(number_minus_1);
+    mpz_sub_ui(number_minus_1, number, 1); // n-1
+
+    mpz_t d;
+    int r = factorOutPowersOf2(number_minus_1, d);
+
+    mpz_t witness;
+    mpz_init(witness);
+
+    for (int i = 0; i < k; i++)
+    {
+        /* Pick a random number between 2 and n-2 inclusive */
+        mpz_sub_ui(witness, number, 3);
+        mpz_urandomm(witness, grt, witness); // [0, n-4]
+        mpz_add_ui(witness, witness, 2);     // [2, n-2]
+
+        if (millerRabin(number, witness, number_minus_1, d, r))
+        {
+            continue;
+        }
+        return 1; // Not prime
+    }
+    return 0; // Probably prime
 }
 
 void generateLargePrimeNumber(mpz_t number, int n)
@@ -81,7 +143,11 @@ void generateLargePrimeNumber(mpz_t number, int n)
         if (is_divisible_by_first_prime(number))
             continue;
 
-        // TODO: Implement high level primality test
+        /* high level primality test */
+        if (multipleMillerRabin(number, 20, grt))
+        {
+            continue;
+        }
 
         /* Number passes all the tests -> considered as prime */
         break;
