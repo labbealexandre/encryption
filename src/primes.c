@@ -5,31 +5,25 @@
 // https://www.programmersought.com/article/24064840329/
 // https://www.geeksforgeeks.org/how-to-generate-large-prime-numbers-for-rsa-algorithm/
 
-void generateLargeNumber(mpz_t number, int n)
+void generateRandomSeed(gmp_randstate_t grt)
 {
     /* Generate a seed based on the time */
     clock_t time = clock();
-    gmp_randstate_t grt;
     gmp_randinit_default(grt);
     gmp_randseed_ui(grt, time);
-
-    /* Generate a number from 0 to 2^(n-1)-1 */
-    mpz_init(number);
-    mpz_urandomb(number, grt, n - 2);
-
-    /* Generate 2^(n-1) */
-    mpz_t most_siginificant;
-    mpz_init_set_ui(most_siginificant, 2);
-    mpz_mul_2exp(number, number, n - 1);
-
-    /* Make sure the most significant bit is 1 */
-    mpz_add(number, number, most_siginificant);
 }
 
-void generateLargeOddNumber(mpz_t number, int n)
+void generateLargeNumber(mpz_t number, int n, gmp_randstate_t grt)
+{
+    /* Generate a number from 0 to 2^(n-1)-1 */
+    mpz_init(number);
+    mpz_rrandomb(number, grt, n);
+}
+
+void generateLargeOddNumber(mpz_t number, int n, gmp_randstate_t grt)
 {
     /* Generate a large odd number */
-    generateLargeNumber(number, n - 1);
+    generateLargeNumber(number, n - 1, grt);
     mpz_mul_ui(number, number, 2);
     mpz_add_ui(number, number, 1);
 }
@@ -76,9 +70,12 @@ void millerRabin(mpz_t number, mpz_t witness)
 
 void generateLargePrimeNumber(mpz_t number, int n)
 {
+    gmp_randstate_t grt;
+    generateRandomSeed(grt);
+
     while (1)
     {
-        generateLargeOddNumber(number, n);
+        generateLargeOddNumber(number, n, grt);
 
         /* Low level primality test */
         if (is_divisible_by_first_prime(number))

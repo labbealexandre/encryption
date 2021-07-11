@@ -35,8 +35,11 @@ void test_sieveOfEratosthenes()
 
 void test_generateLargeNumber()
 {
+    gmp_randstate_t grt;
+    generateRandomSeed(grt);
+
     mpz_t number;
-    generateLargeNumber(number, 8);
+    generateLargeNumber(number, 8, grt);
     int integer = mpz_get_ui(number);
 
     TEST_ASSERT_LESS_THAN_INT(256, integer);
@@ -45,8 +48,11 @@ void test_generateLargeNumber()
 
 void test_generateLargeOddNumber()
 {
+    gmp_randstate_t grt;
+    generateRandomSeed(grt);
+
     mpz_t number;
-    generateLargeOddNumber(number, 8);
+    generateLargeOddNumber(number, 8, grt);
     int integer = mpz_get_ui(number);
 
     TEST_ASSERT_EQUAL_INT(integer % 2, 1);
