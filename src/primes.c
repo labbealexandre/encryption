@@ -67,6 +67,7 @@ int factorOutPowersOf2(mpz_t number, mpz_t d)
     }
 
     mpz_tdiv_q_2exp(d, number, r);
+    mpz_clear(zero_mpz);
     return r;
 }
 
@@ -86,9 +87,11 @@ int millerRabin(mpz_t number, mpz_t witness, mpz_t number_minus_1, mpz_t d, int 
         mpz_powm_ui(x, x, 2, number);        // x = x^2 mod n
         if (mpz_cmp(x, number_minus_1) == 0) // if x = n-1
         {
+            mpz_clear(x);
             return 0;
         }
     }
+    mpz_clear(x);
     return 1;
 }
 
@@ -118,6 +121,10 @@ int multipleMillerRabin(mpz_t number, int k, gmp_randstate_t grt)
         return 1; // Not prime
     }
     return 0; // Probably prime
+
+    mpz_clear(number_minus_1);
+    mpz_clear(d);
+    mpz_clear(witness);
 }
 
 void generateLargePrimeNumber(mpz_t number, int n, gmp_randstate_t grt)
