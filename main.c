@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "primes.h"
+#include "rsa.h"
 #include "utils.h"
 
 int main(int argc, char *argv[])
@@ -16,10 +16,15 @@ int main(int argc, char *argv[])
     gmp_randstate_t grt;
     generateRandomSeed(grt);
 
-    mpz_t number;
-    generateLargePrimeNumber(number, n_bits, grt);
+    mpz_t n;
+    mpz_t e;
+    mpz_t d;
 
-    gmp_printf("%Zd\n", number);
+    rsa(n, e, d, n_bits);
 
-    mpz_clear(number);
+    gmp_printf("n = %Zd\n\n", n);
+    gmp_printf("e = %Zd\n\n", e);
+    gmp_printf("d = %Zd\n\n", d);
+
+    mpz_clear(n);
 }
