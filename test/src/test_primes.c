@@ -1,8 +1,4 @@
-#include "unity.h"
-#include "primes.h"
-
-#define N_FIRST_PRIMES 25
-#define N_FIRST_NUMBERS 100
+#include "test_primes.h"
 
 /* Test suite for sieveOfEratosthenes method */
 

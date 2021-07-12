@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "primes.h"
+#include "utils.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,10 +11,13 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    int n = atoi(argv[1]);
+    int n_bits = atoi(argv[1]);
+
+    gmp_randstate_t grt;
+    generateRandomSeed(grt);
 
     mpz_t number;
-    generateLargePrimeNumber(number, n);
+    generateLargePrimeNumber(number, n_bits, grt);
 
     gmp_printf("%Zd\n", number);
 

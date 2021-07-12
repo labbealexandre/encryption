@@ -1,17 +1,7 @@
 #include "primes.h"
 
-#define FIRST_PRIMES 100
-
 // https://www.programmersought.com/article/24064840329/
 // https://www.geeksforgeeks.org/how-to-generate-large-prime-numbers-for-rsa-algorithm/
-
-void generateRandomSeed(gmp_randstate_t grt)
-{
-    /* Generate a seed based on the time */
-    clock_t time = clock();
-    gmp_randinit_default(grt);
-    gmp_randseed_ui(grt, time);
-}
 
 void generateLargeNumber(mpz_t number, int n, gmp_randstate_t grt)
 {
@@ -130,11 +120,8 @@ int multipleMillerRabin(mpz_t number, int k, gmp_randstate_t grt)
     return 0; // Probably prime
 }
 
-void generateLargePrimeNumber(mpz_t number, int n)
+void generateLargePrimeNumber(mpz_t number, int n, gmp_randstate_t grt)
 {
-    gmp_randstate_t grt;
-    generateRandomSeed(grt);
-
     while (1)
     {
         generateLargeOddNumber(number, n, grt);
